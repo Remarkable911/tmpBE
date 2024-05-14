@@ -1,0 +1,3 @@
+DEBUG = True
+SECRET_KEY = '123'
+HOST = '127.0.0.1'
