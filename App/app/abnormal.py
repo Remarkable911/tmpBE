@@ -42,15 +42,37 @@ class AbnormalOrder(Resource):
         self.data_json['data']['date']['table'] = res
         return jsonify(self.data_json)
 
-    def post(self):
-        orderid = request.json.get('orderid')
-        sql = "DELETE FROM `order` WHERE orderid = %s"
-        res = execute_query(sql, orderid)
-        if res:
-            msg = '删除成功'
+    def put(self):
+        request_json = request.json
+        if request_json:
+            orderid = request_json.get('orderid', None)
+            ata = request_json.get('ata', None)
+            distance = request_json.get('distance', None)
+            simpleeta = request_json.get('simpleeta', None)
+            driverid = request_json.get('driverid', None)
+            sliceid = request_json.get('sliceid', None)
+            date = request_json.get('date', None)
+            startlink = request_json.get('startlink', None)
+            endlink = request_json.get('endlink', None)
+            sql = "UPDATE `order` SET ata =%s, distance =%s,simpleeta =%s,driverid=%s,sliceid=%s, startlink =%s, endlink =%s,date= %s where orderid =%s"
+            execute_query(sql, [ata, distance, simpleeta, driverid, sliceid, startlink, endlink, date, orderid])
+            self.data_json['code'] = 200
+            self.data_json['msg'] = "编辑成功"
         else:
-            msg = '删除失败'
-        return jsonify(msg)
+            self.data_json['code'] = 404
+            self.data_json['msg'] = '未提交数据'
+        return jsonify(self.data_json)
+
+    def delete(self):
+        request_json = request.json
+        print(request_json)
+        orderid = request_json.get('orderid')
+
+        sql = "DELETE FROM `order` where orderid = %s"
+        execute_query(sql, [orderid])
+        self.data_json['code'] = 200
+        self.data_json['msg'] = "删除成功"
+        return jsonify(self.data_json)
 
 
 class AbnormalLink(Resource):
@@ -85,15 +107,35 @@ class AbnormalLink(Resource):
         self.data_json['data']['status']['table'] = res
         return jsonify(self.data_json)
 
-    def post(self):
-        linkid = request.json.get('linkid')
-        sql = "DELETE FROM `link` WHERE linkid = %s"
-        res = execute_query(sql, linkid)
-        if res:
-            msg = '删除成功'
+    def put(self):
+        request_json = request.json
+        if request_json:
+            orderid = request_json.get('orderid', None)
+            sequence = request_json.get('sequence', None)
+            linkid = request_json.get('linkid', None)
+            linktime = request_json.get('linktime', None)
+            linkratio = request_json.get('linkratio', None)
+            linkcurrentstatus = request_json.get('linkcurrentstatus', None)
+            linkarrivalstatus = request_json.get('linkarrivalstatus', None)
+            sql = "UPDATE `link` SET linktime =%s,linkratio= %s,linkcurrentstatus = %s,linkcurrentstatus = %s WHERE orderid = %s AND sequence = %s AND linkid =%s"
+            execute_query(sql, [linktime, linkratio, linkcurrentstatus, linkarrivalstatus, orderid, sequence, linkid])
+            self.data_json['code'] = 200
+            self.data_json['msg'] = "编辑成功"
         else:
-            msg = '删除失败'
-        return jsonify(msg)
+            self.data_json['code'] = 404
+            self.data_json['msg'] = '未提交数据'
+        return jsonify(self.data_json)
+
+    def delete(self):
+        request_json = request.json
+        orderid = request_json.get('orderid', None)
+        sequence = request_json.get('sequence', None)
+        linkid = request_json.get('linkid', None)
+        sql = "DELETE FROM `link` WHERE orderid = %s AND sequence = %s AND linkid =%s"
+        execute_query(sql, [orderid, sequence, linkid])
+        self.data_json['code'] = 200
+        self.data_json['msg'] = "删除成功"
+        return jsonify(self.data_json)
 
 
 class AbnormalCross(Resource):
@@ -112,12 +154,29 @@ class AbnormalCross(Resource):
         self.data_json['data']['table'] = res
         return jsonify(self.data_json)
 
-    def post(self):
-        crossid = request.json.get('crossid')
-        sql = "DELETE FROM `intersection` WHERE crossid = %s"
-        res = execute_query(sql, crossid)
-        if res:
-            msg = "删除成功"
+    def put(self):
+        request_json = request.json
+        if request_json:
+            crossid = request_json.get('crossid', None)
+            entranceid = request_json.get('entranceid', None)
+            exitid = request_json.get('exitid', None)
+            crosstime = request_json.get('crosstime', None)
+            orderid = request_json.get('orderid', None)
+            sql = "UPDATE `intersection` SET crosstime = %s, entranceid = %s, exitid = %s WHERE orderid = %s AND crossid = %s"
+            execute_query(sql, [crosstime, entranceid, exitid, orderid, crossid])
+            self.data_json['code'] = 200
+            self.data_json['msg'] = "编辑成功"
         else:
-            msg = "删除失败"
-        return jsonify(msg)
+            self.data_json['code'] = 404
+            self.data_json['msg'] = '未提交数据'
+        return jsonify(self.data_json)
+
+    def delete(self):
+        request_json = request.json
+        crossid = request_json.get('crossid', None)
+        orderid = request_json.get('orderid', None)
+        sql = "DELETE FROM `intersection` WHERE orderid =%s AND crossid =%s"
+        execute_query(sql, [orderid, crossid])
+        self.data_json['code'] = 200
+        self.data_json['msg'] = "删除成功"
+        return jsonify(self.data_json)

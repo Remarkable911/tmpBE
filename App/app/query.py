@@ -17,8 +17,7 @@ class OrderQuery(Resource):
         return jsonify(self.data_json)
 
     def post(self):
-        response_date = request.json.get('formattedDate')
-        print(response_date)
+        response_date = request.json.get('formatDate')
         sql = "SELECT * FROM `order` WHERE date = %s LIMIT 10"
         res = execute_query(sql, [response_date])
         self.data_json['data'] = res
@@ -39,7 +38,7 @@ class WeatherQuery(Resource):
         return jsonify(self.data_json)
 
     def post(self):
-        response_date = request.json.get('formattedDate')
+        response_date = request.json.get('formatDate')
         sql = "SELECT * FROM `weather` WHERE date = %s LIMIT 10"
         res = execute_query(sql, [response_date])
         self.data_json['data'] = res
@@ -60,10 +59,9 @@ class LinkQuery(Resource):
         return jsonify(self.data_json)
 
     def post(self):
-        response_date = request.json.get('formattedDate')
-        print(response_date)
-        sql = "SELECT * FROM `link` WHERE orderid = %s LIMIT 10"
-        res = execute_query(sql, [response_date])
+        linkId = request.json.get('linkId')
+        sql = "SELECT * FROM `link` WHERE linkid = %s LIMIT 10"
+        res = execute_query(sql, [linkId])
         self.data_json['data'] = res
         return jsonify(self.data_json)
 
@@ -82,9 +80,9 @@ class CrossQuery(Resource):
         return jsonify(self.data_json)
 
     def post(self):
-        response_date = request.json.get('formattedDate')
-        print(response_date)
-        sql = "SELECT * FROM `intersection` WHERE orderid = %s LIMIT 10"
-        res = execute_query(sql, [response_date])
+        crossId = request.json.get('crossId')
+        print(crossId)
+        sql = "SELECT * FROM `intersection` WHERE crossid = %s LIMIT 10"
+        res = execute_query(sql, [crossId])
         self.data_json['data'] = res
         return jsonify(self.data_json)
